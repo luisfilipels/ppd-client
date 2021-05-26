@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import networking.NetworkHandlerSingleton;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.advisory.DestinationSource;
@@ -100,7 +101,7 @@ public class ReadDataController {
             Stage primaryStage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
             primaryStage.setTitle("Cliente");
-            primaryStage.setScene(new Scene(root, 600, 400));
+            primaryStage.setScene(new Scene(root, 700, 400));
             primaryStage.setResizable(false);
             primaryStage.show();
         } catch (Exception e) {

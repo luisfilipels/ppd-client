@@ -1,5 +1,7 @@
 package networking;
 
+import main.MainViewController;
+
 public class NetworkHandlerSingleton {
 
     private Subscriber subscriber;
@@ -17,8 +19,8 @@ public class NetworkHandlerSingleton {
         return instance;
     }
 
-    public void initialize() {
-        subscriber.initialize();
+    public void initialize(MainViewController mainViewController) {
+        subscriber.initialize(mainViewController);
     }
 
 }

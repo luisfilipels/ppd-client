@@ -1,5 +1,6 @@
 package networking;
 
+import main.MainViewController;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import utils.ClientDataSingleton;
@@ -13,7 +14,10 @@ class Subscriber implements MessageListener{
     // TODO: Change this
     private String url = ActiveMQConnection.DEFAULT_BROKER_URL;
 
-    public void initialize() {
+    private MainViewController controller;
+
+    public void initialize(MainViewController controller) {
+        this.controller = controller;
         try {
             ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
             Connection connection = connectionFactory.createConnection();
@@ -37,7 +41,9 @@ class Subscriber implements MessageListener{
     public void onMessage(Message message) {
         if(message instanceof TextMessage){
             try{
-                System.out.println( ((TextMessage)message).getText());
+                if (controller != null) {
+                    controller.addLog(((TextMessage) message).getText());
+                }
             }catch(Exception e){
                 e.printStackTrace();
             }
