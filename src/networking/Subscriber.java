@@ -18,6 +18,7 @@ class Subscriber implements MessageListener{
 
     public void initialize(MainViewController controller) {
         this.controller = controller;
+        url = ClientDataSingleton.getInstance().getBrokerIP();
         try {
             ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
             Connection connection = connectionFactory.createConnection();

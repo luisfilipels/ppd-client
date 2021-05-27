@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import networking.NetworkHandlerSingleton;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.advisory.DestinationSource;
@@ -30,8 +29,10 @@ public class ReadDataController {
     private ListView<CheckBox> topicListView;
     ObservableList<CheckBox> topicList;
 
-    Connection connection;
-    DestinationSource destinationSource;
+    @FXML
+    private TextField brokerAddressField;
+
+    ConnectionFactory connectionFactory;
 
     private static final String PATTERN =
             "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -40,21 +41,46 @@ public class ReadDataController {
                     "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 
     // Got this function from StackOverFlow
-    public static boolean validate(final String ip){
+    public static boolean isValid(final String ip){
         Pattern pattern = Pattern.compile(PATTERN);
         Matcher matcher = pattern.matcher(ip);
         return matcher.matches();
     }
 
-    @FXML
-    void onRefreshButton() {
-        getTopics();
+    private String getIp() {
+        String ip = brokerAddressField.getText().trim();
+        if (ip.trim().equals("") || !isValid(ip)) {
+            return "failover://tcp://localhost:61616";
+        } else {
+            return "failover://tcp://" + ip + ":61616";
+        }
     }
 
-    public void getTopics() {
+    private void createConnectionAndRefreshTopicsWithIP(String ip) {
+        connectionFactory = new ActiveMQConnectionFactory(ip);
+        try {
+            Connection connection = connectionFactory.createConnection();
+            DestinationSource destinationSource = new DestinationSource(connection);
+            connection.start();
+            destinationSource.start();
+            getTopicsUsingSource(destinationSource);
+            connection.close();
+            destinationSource.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void onRefreshButton() {
+        String ip = getIp();
+        createConnectionAndRefreshTopicsWithIP(ip);
+    }
+
+    private void getTopicsUsingSource(DestinationSource source) {
         topicList.clear();
         try {
-            var list = destinationSource.getTopics();
+            var list = source.getTopics();
             for (var v : list) {
                 CheckBox b = new CheckBox();
                 b.setText(v.getTopicName());
@@ -69,17 +95,7 @@ public class ReadDataController {
     public void initialize() {
         topicList = FXCollections.observableArrayList();
         topicListView.setItems(topicList);
-
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
-        try {
-            connection = connectionFactory.createConnection();
-            destinationSource = new DestinationSource(connection);
-            connection.start();
-            destinationSource.start();
-            getTopics();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //createConnectionAndRefreshTopicsWithIP(url);
     }
 
     @FXML
@@ -92,6 +108,7 @@ public class ReadDataController {
                 clientData.subscribedTopics.add(box.getText());
             }
         }
+        clientData.setBrokerIP(getIp());
 
         Node source = (Node) event.getSource();
         Stage stage = (Stage) source.getScene().getWindow();

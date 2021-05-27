@@ -10,6 +10,15 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="javafx-swt" level="application" />
     <orderEntry type="library" name="javafx12" level="application" />
-    <orderEntry type="library" name="apachelib" level="project" />
+    <orderEntry type="module-library">
+      <library name="apachelib">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../ppd-teste/apache-activemq-5.16.2/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../ppd-teste/apache-activemq-5.16.2/lib" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
