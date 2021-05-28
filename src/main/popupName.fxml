@@ -14,5 +14,7 @@
       <ListView fx:id="topicListView" layoutX="62.0" layoutY="108.0" prefHeight="217.0" prefWidth="279.0" />
       <Text layoutX="129.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lista de tópicos disponíveis" />
       <Button layoutX="170.0" layoutY="330.0" mnemonicParsing="false" onAction="#onRefreshButton" text="Atualizar" />
+      <Text fx:id="invalidIPText" fill="RED" layoutX="172.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP inválido!" />
+      <Text fx:id="noTopicSelectedText" fill="RED" layoutX="119.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selecione pelo menos 1 tópico!" />
    </children>
 </Pane>
