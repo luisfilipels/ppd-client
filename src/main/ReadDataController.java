@@ -107,7 +107,6 @@ public class ReadDataController {
 
     @FXML
     public void onConfirmButton(ActionEvent event) {
-        // TODO: Select server IP
 
         ClientDataSingleton clientData = ClientDataSingleton.getInstance();
         clientData.subscribedTopics.clear();

@@ -11,7 +11,6 @@ import java.util.concurrent.Semaphore;
 
 class Subscriber implements MessageListener{
 
-    // TODO: Change this
     private String url = ActiveMQConnection.DEFAULT_BROKER_URL;
 
     private MainViewController controller;
